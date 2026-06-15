@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { 
   Shipment, Vehicle, Driver, Invoice, FuelLog, WorkOrder, Route, 
-  BorderPost, CustomsDecl, Customer, AppNotification, ActivityLog, Settings, AppDocument, Permit
+  BorderPost, CustomsDecl, Customer, AppNotification, ActivityLog, Settings, AppDocument, Permit, WarehouseConsignment
 } from '../types';
 
 interface AppState {
@@ -20,12 +20,65 @@ interface AppState {
   notifications: AppNotification[];
   activity: ActivityLog[];
   settings: Settings;
+  warehouseConsignments: WarehouseConsignment[];
   
   // Actions
+  addWarehouseConsignment: (w: WarehouseConsignment) => void;
+  updateWarehouseConsignment: (id: string, updated: Partial<WarehouseConsignment>) => void;
+  deleteWarehouseConsignment: (id: string) => void;
+  
   addShipment: (s: Shipment) => void;
-  updateShipmentStatus: (id: string, status: string) => void;
+  updateShipment: (id: string, updated: Partial<Shipment>) => void;
+  deleteShipment: (id: string) => void;
   deleteShipments: (ids: string[]) => void;
-  addActivity: (title: string, sub: string, type: 'gr'|'rd'|'ac'|'bl'|'pu') => void;
+  
+  addVehicle: (v: Vehicle) => void;
+  updateVehicle: (unit: string, updated: Partial<Vehicle>) => void;
+  deleteVehicle: (unit: string) => void;
+
+  addDriver: (d: Driver) => void;
+  updateDriver: (empId: string, updated: Partial<Driver>) => void;
+  deleteDriver: (empId: string) => void;
+
+  addInvoice: (i: Invoice) => void;
+  updateInvoice: (no: string, updated: Partial<Invoice>) => void;
+  deleteInvoice: (no: string) => void;
+
+  addFuel: (f: FuelLog) => void;
+  deleteFuel: (index: number) => void;
+
+  addWorkOrder: (w: WorkOrder) => void;
+  updateWorkOrder: (no: string, updated: Partial<WorkOrder>) => void;
+  deleteWorkOrder: (no: string) => void;
+
+  addDocument: (doc: AppDocument) => void;
+  updateDocument: (name: string, updated: Partial<AppDocument>) => void;
+  deleteDocument: (name: string) => void;
+
+  addPermit: (p: Permit) => void;
+  updatePermit: (num: string, updated: Partial<Permit>) => void;
+  deletePermit: (num: string) => void;
+
+  addRoute: (r: Route) => void;
+  updateRoute: (name: string, updated: Partial<Route>) => void;
+  deleteRoute: (name: string) => void;
+
+  addCustomer: (c: Customer) => void;
+  updateCustomer: (name: string, updated: Partial<Customer>) => void;
+  deleteCustomer: (name: string) => void;
+
+  addBorder: (b: BorderPost) => void;
+  updateBorder: (name: string, updated: Partial<BorderPost>) => void;
+  deleteBorder: (name: string) => void;
+
+  addCustoms: (c: CustomsDecl) => void;
+  updateCustoms: (awb: string, updated: Partial<CustomsDecl>) => void;
+  deleteCustoms: (awb: string) => void;
+
+  addActivity: (title: string, sub: string, type: 'gr' | 'rd' | 'ac' | 'bl' | 'pu') => void;
+  updateSettings: (s: Partial<Settings>) => void;
+  toggleNotification: (id: number) => void;
+  clearNotifications: () => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -92,15 +145,189 @@ export const useStore = create<AppState>((set) => ({
     {type:'rd',title:'Beit Bridge — Backlog Alert',sub:'Wait time exceeded 6h SLA threshold',time:'13:05'},
   ],
   settings: {company:'TransAfrica Freight (Pty) Ltd',vat:'4180192371',sars:'CBRC-12445',office:'14 Freight Park, Linbro, Johannesburg',emergency:'+27 11 000 1234',dispatcher:'Alwin',borderAlert:4,permitWarn:60,serviceWarn:2000,invoiceWarn:14,hoursLimit:60},
+  warehouseConsignments: [
+    {
+      id: 'WH-001',
+      shipmentId: 'TAF-2406-882',
+      customer: 'AECI Limited',
+      warehouseName: 'Vioolsdrift Border Facility',
+      commodity: 'Chemicals',
+      weight: 24.0,
+      entryDate: '2026-06-12',
+      daysStored: 3,
+      reason: 'Customs Paperwork Pending',
+      status: 'Stored',
+      dailyCost: 1200,
+      notes: 'Missing DA-65 Declaration, hazardous class 3 cargo.'
+    },
+    {
+      id: 'WH-002',
+      shipmentId: 'TAF-2406-885',
+      customer: 'Mustek Ltd',
+      warehouseName: 'Beit Bridge Depot & Storage',
+      commodity: 'Electronics',
+      weight: 7.2,
+      entryDate: '2026-06-14',
+      daysStored: 1,
+      reason: 'Border Congestion / Wait Times',
+      status: 'Stored',
+      dailyCost: 950,
+      notes: 'Safe secure hold due to Beit Bridge queue lines exceeding 6h SLA limit.'
+    },
+    {
+      id: 'WH-003',
+      shipmentId: 'TAF-2406-884',
+      customer: 'PPC Cement',
+      warehouseName: 'Ramotswa Holding Yard',
+      commodity: 'Building Materials',
+      weight: 32.5,
+      entryDate: '2026-06-14',
+      daysStored: 1,
+      reason: 'Hazardous Escort / Oversized Limit',
+      status: 'Inspecting',
+      dailyCost: 1500,
+      notes: 'Oversize escort clearance paperwork expected tomorrow.'
+    },
+    {
+      id: 'WH-004',
+      shipmentId: 'TAF-2406-881',
+      customer: 'Shoprite Holdings',
+      warehouseName: 'JHB Main Depot Storage',
+      commodity: 'Retail Goods',
+      weight: 18.4,
+      entryDate: '2026-06-10',
+      daysStored: 2,
+      reason: 'Driver Mandatory Rest',
+      status: 'Released',
+      dailyCost: 800,
+      notes: 'Clean checkout after 12-hour driver sleep interval completed successfully.'
+    },
+    {
+      id: 'WH-005',
+      shipmentId: 'TAF-2406-883',
+      customer: 'Foschini Group',
+      warehouseName: 'Oshoek Buffer Warehouse',
+      commodity: 'Textiles',
+      weight: 9.6,
+      entryDate: '2026-06-11',
+      daysStored: 1,
+      reason: 'Border Closed overnight',
+      status: 'Released',
+      dailyCost: 850,
+      notes: 'Gate closed at 22:00. Overnight buffer storage utilized, cleared and left at 06:15.'
+    }
+  ],
 
+  // Actions implementation
+  addWarehouseConsignment: (w) => set((state) => ({ warehouseConsignments: [w, ...state.warehouseConsignments] })),
+  updateWarehouseConsignment: (id, updated) => set((state) => ({
+    warehouseConsignments: state.warehouseConsignments.map(w => w.id === id ? { ...w, ...updated } : w)
+  })),
+  deleteWarehouseConsignment: (id) => set((state) => ({
+    warehouseConsignments: state.warehouseConsignments.filter(w => w.id !== id)
+  })),
   addShipment: (s) => set((state) => ({ shipments: [s, ...state.shipments] })),
-  updateShipmentStatus: (id, status) => set((state) => ({
-    shipments: state.shipments.map(s => s.id === id ? { ...s, status } : s)
+  updateShipment: (id, updated) => set((state) => ({
+    shipments: state.shipments.map(s => s.id === id ? { ...s, ...updated } : s)
+  })),
+  deleteShipment: (id) => set((state) => ({
+    shipments: state.shipments.filter(s => s.id !== id)
   })),
   deleteShipments: (ids) => set((state) => ({
     shipments: state.shipments.filter(s => !ids.includes(s.id))
   })),
+
+  addVehicle: (v) => set((state) => ({ fleet: [v, ...state.fleet] })),
+  updateVehicle: (unit, updated) => set((state) => ({
+    fleet: state.fleet.map(v => v.unit === unit ? { ...v, ...updated } : v)
+  })),
+  deleteVehicle: (unit) => set((state) => ({
+    fleet: state.fleet.filter(v => v.unit !== unit)
+  })),
+
+  addDriver: (d) => set((state) => ({ drivers: [d, ...state.drivers] })),
+  updateDriver: (empId, updated) => set((state) => ({
+    drivers: state.drivers.map(d => d.empId === empId ? { ...d, ...updated } : d)
+  })),
+  deleteDriver: (empId) => set((state) => ({
+    drivers: state.drivers.filter(d => d.empId !== empId)
+  })),
+
+  addInvoice: (i) => set((state) => ({ invoices: [i, ...state.invoices] })),
+  updateInvoice: (no, updated) => set((state) => ({
+    invoices: state.invoices.map(i => i.no === no ? { ...i, ...updated } : i)
+  })),
+  deleteInvoice: (no) => set((state) => ({
+    invoices: state.invoices.filter(i => i.no !== no)
+  })),
+
+  addFuel: (f) => set((state) => ({ fuel: [f, ...state.fuel] })),
+  deleteFuel: (index) => set((state) => ({
+    fuel: state.fuel.filter((_, idx) => idx !== index)
+  })),
+
+  addWorkOrder: (w) => set((state) => ({ workOrders: [w, ...state.workOrders] })),
+  updateWorkOrder: (no, updated) => set((state) => ({
+    workOrders: state.workOrders.map(w => w.no === no ? { ...w, ...updated } : w)
+  })),
+  deleteWorkOrder: (no) => set((state) => ({
+    workOrders: state.workOrders.filter(w => w.no !== no)
+  })),
+
+  addDocument: (doc) => set((state) => ({ documents: [doc, ...state.documents] })),
+  updateDocument: (name, updated) => set((state) => ({
+    documents: state.documents.map(d => d.name === name ? { ...d, ...updated } : d)
+  })),
+  deleteDocument: (name) => set((state) => ({
+    documents: state.documents.filter(d => d.name !== name)
+  })),
+
+  addPermit: (p) => set((state) => ({ permits: [p, ...state.permits] })),
+  updatePermit: (num, updated) => set((state) => ({
+    permits: state.permits.map(p => p.num === num ? { ...p, ...updated } : p)
+  })),
+  deletePermit: (num) => set((state) => ({
+    permits: state.permits.filter(p => p.num !== num)
+  })),
+
+  addRoute: (r) => set((state) => ({ routes: [r, ...state.routes] })),
+  updateRoute: (name, updated) => set((state) => ({
+    routes: state.routes.map(r => r.name === name ? { ...r, ...updated } : r)
+  })),
+  deleteRoute: (name) => set((state) => ({
+    routes: state.routes.filter(r => r.name !== name)
+  })),
+
+  addCustomer: (c) => set((state) => ({ customers: [c, ...state.customers] })),
+  updateCustomer: (name, updated) => set((state) => ({
+    customers: state.customers.map(c => c.name === name ? { ...c, ...updated } : c)
+  })),
+  deleteCustomer: (name) => set((state) => ({
+    customers: state.customers.filter(c => c.name !== name)
+  })),
+
+  addBorder: (b) => set((state) => ({ borders: [b, ...state.borders] })),
+  updateBorder: (name, updated) => set((state) => ({
+    borders: state.borders.map(b => b.name === name ? { ...b, ...updated } : b)
+  })),
+  deleteBorder: (name) => set((state) => ({
+    borders: state.borders.filter(b => b.name !== name)
+  })),
+
+  addCustoms: (c) => set((state) => ({ customs: [c, ...state.customs] })),
+  updateCustoms: (awb, updated) => set((state) => ({
+    customs: state.customs.map(c => c.awb === awb ? { ...c, ...updated } : c)
+  })),
+  deleteCustoms: (awb) => set((state) => ({
+    customs: state.customs.filter(c => c.awb !== awb)
+  })),
+
   addActivity: (title, sub, type) => set((state) => ({
     activity: [{ title, sub, type, time: new Date().toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' }) }, ...state.activity]
   })),
+  updateSettings: (s) => set((state) => ({ settings: { ...state.settings, ...s } })),
+  toggleNotification: (id) => set((state) => ({
+    notifications: state.notifications.map(n => n.id === id ? { ...n, unread: !n.unread } : n)
+  })),
+  clearNotifications: () => set({ notifications: [] }),
 }));

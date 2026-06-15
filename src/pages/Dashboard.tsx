@@ -5,6 +5,7 @@ import { Card, CardHeader, KPI } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { fmtR, fmtShortDate, flagFor } from '@/lib/utils';
 import { ArrowDownToLine, Calculator, Plus } from 'lucide-react';
+import CorridorMap from '@/components/CorridorMap';
 
 export default function Dashboard() {
   const store = useStore();
@@ -49,16 +50,7 @@ export default function Dashboard() {
       </div>
 
       <div className="px-8">
-        <Card className="p-0">
-          <div className="p-3.5 border-b border-[var(--color-border-1)]">
-            <CardHeader title="Live BLNS Corridor Map" action="Full Details →" />
-          </div>
-          <div className="relative bg-[var(--color-surface-2)] overflow-hidden flex items-center justify-center p-8 text-[var(--color-text-muted)] min-h-[160px] font-mono">
-            <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/grid-me.png')] mix-blend-overlay"></div>
-            [ MAP VISUALIZATION ENGINE - BLNS REGION ]
-            <p className="absolute bottom-3 right-4 font-mono text-[10px] text-[var(--color-brand-accent)]">{activeShipments} trucks en route</p>
-          </div>
-        </Card>
+        <CorridorMap />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 px-8">

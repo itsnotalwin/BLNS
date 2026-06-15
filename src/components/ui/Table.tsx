@@ -11,8 +11,8 @@ export function Table({ children, className }: { children: React.ReactNode, clas
   );
 }
 
-export function Th({ children }: { children: React.ReactNode }) {
-  return <th className="font-mono text-[9px] uppercase tracking-wider text-[var(--color-text-dim)] py-2.5 px-3 border-b border-[var(--color-border-1)] font-medium whitespace-nowrap">{children}</th>;
+export function Th({ children, className, ...props }: React.ThHTMLAttributes<HTMLTableHeaderCellElement>) {
+  return <th className={cn("font-mono text-[9px] uppercase tracking-wider text-[var(--color-text-dim)] py-2.5 px-3 border-b border-[var(--color-border-1)] font-medium whitespace-nowrap", className)} {...props}>{children}</th>;
 }
 
 export function Td({ children, className, ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) {

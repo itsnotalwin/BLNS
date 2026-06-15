@@ -7,6 +7,7 @@ import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import Dashboard from './pages/Dashboard';
 import Shipments from './pages/Shipments';
+import WarehousePage from './pages/WarehousePage';
 import RoutesPage from './pages/RoutesPage';
 import Fleet from './pages/Fleet';
 import Drivers from './pages/Drivers';
@@ -28,6 +29,7 @@ export default function App() {
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="shipments" element={<Shipments />} />
+          <Route path="warehouse" element={<WarehousePage />} />
           <Route path="routes" element={<RoutesPage />} />
           <Route path="fleet" element={<Fleet />} />
           <Route path="drivers" element={<Drivers />} />

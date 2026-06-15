@@ -13,6 +13,7 @@ const navSections = [
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard', badge: null },
       { id: 'shipments', label: 'Shipments', icon: Box, path: '/shipments', badge: (s: any) => s.shipments.filter((x:any)=>x.status==='In Transit').length, badgeColor: 'bg-[rgba(240,165,0,.15)] text-[var(--color-brand-accent)]' },
+      { id: 'warehouse', label: 'Overnight Warehouse', icon: Building2, path: '/warehouse', badge: (s: any) => s.warehouseConsignments ? s.warehouseConsignments.filter((x: any) => x.status === 'Stored' || x.status === 'Inspecting').length : 0, badgeColor: 'bg-[rgba(99,102,241,0.15)] text-indigo-400' },
       { id: 'routes', label: 'Routes & Corridors', icon: Map, path: '/routes', badge: null },
       { id: 'fleet', label: 'Fleet Management', icon: Truck, path: '/fleet', badge: (s: any) => s.fleet.filter((x:any)=>x.status==='Breakdown'||x.status==='Service Due').length, badgeColor: 'bg-[rgba(239,68,68,.15)] text-[var(--color-brand-red)]' },
       { id: 'drivers', label: 'Drivers', icon: User, path: '/drivers', badge: null },

@@ -5,6 +5,7 @@ import { Card, CardHeader, KPI } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Table, Th, Td, Tr } from '@/components/ui/Table';
 import { Map, Plus, Download } from 'lucide-react';
+import CorridorMap from '@/components/CorridorMap';
 
 export default function RoutesPage() {
   const store = useStore();
@@ -35,6 +36,10 @@ export default function RoutesPage() {
          <KPI title="OPERATIONAL" value={op.toString()} colorClass="text-[var(--color-brand-green)]" />
          <KPI title="WITH DELAYS" value={del.toString()} colorClass="text-[var(--color-brand-red)]" />
          <KPI title="AVG TRANSIT (H)" value={`${avg}h`} colorClass="text-[var(--color-brand-blue)]" />
+      </div>
+
+      <div className="px-8">
+        <CorridorMap />
       </div>
 
       <div className="px-8">

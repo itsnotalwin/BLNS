@@ -169,3 +169,19 @@ export interface Settings {
   invoiceWarn: number;
   hoursLimit: number;
 }
+
+export interface WarehouseConsignment {
+  id: string;
+  shipmentId: string;
+  customer: string;
+  warehouseName: string;
+  commodity: string;
+  weight: number;
+  entryDate: string;
+  daysStored: number;
+  reason: string;
+  status: 'Stored' | 'Released' | 'Inspecting';
+  dailyCost: number;
+  notes?: string;
+}
+
