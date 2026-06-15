@@ -1,0 +1,6 @@
+{
+  "name": "TransAfrica Freight Portal",
+  "description": "Enterprise freight logistics platform tracking cross-border shipments, vehicle fleet, customs clearance, fuel, and drivers across southern Africa.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
